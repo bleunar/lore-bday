@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    volumes:
+      - .:/usr/share/nginx/html
+    restart: always
+    networks:
+      - main-network
+
+networks:
+  main-network:
+    name: main-network
+    external: true

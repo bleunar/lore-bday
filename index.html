@@ -1,6 +1,525 @@
-<html>
-	<head>
-		<title>haha</haha>	
-	</head>
-	<body><h4>hello</h4></body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Lorraine! 🌻</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600&family=Great+Vibes&family=Homemade+Apple&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sage: #ADC178;
+            --matcha: #626F47;
+            --cream: #F0EAD6;
+            --sunflower: #FFB703;
+            --dark-sage: #4A5533;
+        }
+
+        body {
+            background-color: var(--cream);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            color: var(--dark-sage);
+        }
+
+        .serif { font-family: 'DM+Serif+Display', serif; }
+        .signature { font-family: 'Great Vibes', cursive; }
+        .handwritten { font-family: 'Homemade Apple', cursive; }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: none;
+            background: radial-gradient(circle at center, #FDFBF0 0%, #DDE5B6 100%);
+        }
+
+        .hidden-el { display: none !important; }
+        
+        .letter-modal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--sage);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Polaroid Gallery */
+        .layout-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1200px;
+            padding: 60px 20px;
+        }
+        
+        .item {
+            background: white;
+            padding: 12px 12px 40px 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .item:hover {
+            transform: scale(1.08) rotate(0deg) !important;
+            z-index: 50;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.15);
+        }
+        .item img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: #f7f7f7;
+            border: 1px solid #eee;
+        }
+        .item .caption {
+            margin-top: 15px;
+            font-family: 'Homemade Apple', cursive;
+            color: var(--matcha);
+            font-size: 0.85rem;
+        }
+
+        .sunflower-float {
+            position: absolute;
+            font-size: 2.5rem;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.6;
+        }
+
+        #sunflower-trigger {
+            font-size: 6rem;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+        }
+        #sunflower-trigger:hover {
+            transform: scale(1.15) rotate(15deg);
+        }
+
+        /* 3D UI Overlay */
+        #ui-overlay {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 99px;
+            border: 1px solid rgba(255,255,255,0.3);
+            pointer-events: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--cream); }
+        ::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Phase 1: Intro -->
+    <div id="intro" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-[#F0EAD6] transition-opacity duration-1000 cursor-pointer">
+        <div class="sunflower-float" style="top:15%; left:10%">🌻</div>
+        <div class="sunflower-float" style="bottom:20%; right:15%">🌻</div>
+        <div class="sunflower-float" style="top:20%; right:10%">🌻</div>
+        
+        <h1 class="serif text-5xl md:text-8xl text-[#626F47] mb-4 text-center px-4 tracking-tight">hello, lorraine!</h1>
+        <p class="handwritten text-xl text-[#A3B18A] animate-bounce">Click anywhere to begin</p>
+    </div>
+
+    <!-- Phase 2: Password -->
+    <div id="password-screen" class="fixed inset-0 flex flex-col items-center justify-center z-40 hidden-el bg-[#F0EAD6] px-6">
+        <div class="max-w-md w-full bg-white/40 p-10 rounded-3xl backdrop-blur-sm border-2 border-white/50 text-center shadow-xl">
+            <h2 class="text-3xl serif text-[#626F47] mb-6">A Little Security...</h2>
+            <p class="text-gray-600 mb-8">Enter the secret word to unlock your birthday surprise.</p>
+            
+            <div class="relative mb-6">
+                <input type="password" id="pw-input" 
+                    class="w-full bg-white border-2 border-[#ADC178] rounded-2xl px-6 py-4 outline-none text-center text-xl tracking-widest focus:ring-4 focus:ring-[#ADC178]/30 transition-all" 
+                    placeholder="••••••••">
+            </div>
+            
+            <p class="italic text-sm text-[#A3B18A] mb-8 handwritten">clue: after class iyay</p>
+            
+            <button id="pw-submit" class="w-full bg-[#626F47] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#4A5533] transform active:scale-95 transition-all shadow-lg">
+                Unlock Memories
+            </button>
+        </div>
+    </div>
+
+    <!-- Phase 3: 3D Cake World -->
+    <div id="canvas-container">
+        <div id="ui-overlay" class="hidden-el opacity-0 transition-opacity duration-1000">
+            <div class="glass-card flex flex-col items-center gap-2">
+                <p class="serif text-[#626F47]">Click the candles to read messages</p>
+                <button id="open-memories-btn" class="bg-[#626F47] text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-[#4A5533] transition-colors">
+                    View Photo Scrapbook →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secret Letter Overlay -->
+    <div id="secret-overlay" class="fixed inset-0 z-[100] hidden-el flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm">
+        <div class="letter-modal p-8 md:p-12 rounded-3xl max-w-lg w-full relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-[#FFB703]"></div>
+            <button id="close-letter" class="absolute top-4 right-6 text-3xl text-gray-400 hover:text-black transition-colors">&times;</button>
+            
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-[#F0EAD6] flex items-center justify-center text-2xl">🕯️</div>
+                <h3 id="letter-title" class="serif text-3xl text-[#626F47]">Candle #1</h3>
+            </div>
+            
+            <div class="max-h-[60vh] overflow-y-auto pr-4">
+                <p id="letter-content" class="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap"></p>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end">
+                <p class="signature text-2xl text-[#626F47]">With love always</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phase 4: Photo Gallery Layout -->
+    <div id="gallery-screen" class="fixed inset-0 z-[60] hidden-el bg-[#F0EAD6] overflow-y-auto flex flex-col items-center">
+        <nav class="sticky top-0 w-full bg-[#F0EAD6]/80 backdrop-blur-md z-[70] py-6 px-10 flex justify-between items-center border-b border-[#ADC178]/20">
+            <button id="back-to-cake" class="text-[#626F47] flex items-center gap-2 font-bold hover:translate-x-[-5px] transition-transform">
+                ← Back to Cake
+            </button>
+            <h2 class="serif text-2xl md:text-3xl text-[#626F47]">memories💚</h2>
+            <div class="w-20"></div>
+        </nav>
+        
+        <!-- Sunflower Trigger -->
+        <div id="sunflower-trigger-container" class="flex flex-col items-center mt-12 mb-4">
+            <div id="sunflower-trigger" class="hover:rotate-12 transition-transform">🌻</div>
+            <p class="text-[#626F47] mt-6 serif text-xl italic px-4 text-center">Tap the sunflower to reveal your photos...</p>
+            <p id="progress-text" class="text-[#A3B18A] text-sm mt-2 uppercase tracking-widest font-bold">0 / 7 Unlocked</p>
+        </div>
+        
+        <div class="layout-container" id="photo-grid"></div>
+        
+        <div class="h-40"></div>
+    </div>
+
+    <script>
+        // --- PHOTO UPLOAD SECTION ---
+        // Using "Direct Links" from Postimages which usually require the i.postimg.cc domain
+        const myPhotos = [
+            "./assets/img/1.jpg",
+            "./assets/img/2.jpg",
+            "./assets/img/3.jpg",
+            "./assets/img/4.jpg",
+            "./assets/img/5.jpg",
+            "./assets/img/6.jpg",
+            "./assets/img/7.jpg",
+        ];
+
+        const myCaptions = [
+            "Cherishing this moment ✨",
+            "Too many laughs ❤️",
+            "The perfect memory 🌻",
+            "Best friend things ",
+            "Always smiling with you",
+            "Through thick and thin",
+            "Happy 18th Birthday, Lorraine! 🎉"
+        ];
+
+        // --- Configuration & Data ---
+        const messages = [
+            "Happy 18th birthday, Lorraine aka my mowm, my best friend, my sister, my everything; I wish you nothing but genuine happiness and endless blessings as you step into this new chapter of adulthood. Even when I’m not always physically there, please remember I’m always here for you, loving and supporting you; happy birthday again, mowm.\n\n- Clarence",
+            "hapi bitdet lorin!!! wra lsm, gsm pwede pa NYAHHAHQHAHAH mi hir always 4 u lob u nig-\n\n- izlen",
+            "neee! i am so very very proud kanimo, sa tanan nga mga achievements mo kag mga small wins mo in life, ja lang ko pirmi nga mamati kag maimaw sa kung ano trip mo, i love youuu and lets grow together ne\n\n- liyan",
+            "You deserve all the matcha in the world today. May your day be as sweet as you are!",
+            "I'm so proud of the woman you're becoming. The world isn't ready for your light!",
+            "Through every chaotic moment and every 'iyay' laugh, you've been the best anchor.",
+            "To more 'iyay' moments after school! May our laughs never end.",
+            "You're not just a best friend, you're the sister I got to choose for myself.",
+            "Here's to a future filled with sage green aesthetics and endless peace.",
+            "Stay sweet, stay kind, and never let the world change that beautiful heart of yours.",
+            "I'll always be your #1 cheerleader, through the highs and the lows.",
+            "Happy birthday to my favorite human. You make everything brighter just by existing.",
+            "Let's make this year the best one yet. 18 looks absolutely stunning on you!",
+            "18 is just the beginning of your grand adventure. Chase every dream, Lorraine!",
+            "May your life be as bright, resilient, and beautiful as a field of sunflowers.",
+            "I hope this little digital surprise made you smile as much as you make us smile.",
+            "Cheers to us and the unbreakable bond we share. 18 years down, a lifetime to go!",
+            "I love you so much, Lorraine! Welcome to adulthood - you're going to be amazing! 🥂"
+        ];
+
+        let phase = 'intro';
+        let scene, camera, renderer, cakeGroup, candles = [];
+        let photoCount = 0;
+        const totalPhotos = 7; 
+
+        // --- Elements ---
+        const intro = document.getElementById('intro');
+        const pwScreen = document.getElementById('password-screen');
+        const canvasContainer = document.getElementById('canvas-container');
+        const galleryScreen = document.getElementById('gallery-screen');
+        const secretOverlay = document.getElementById('secret-overlay');
+        const photoGrid = document.getElementById('photo-grid');
+        const uiOverlay = document.getElementById('ui-overlay');
+
+        // --- Core Transitions ---
+        intro.addEventListener('click', () => {
+            if (phase !== 'intro') return;
+            phase = 'password';
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.classList.add('hidden-el');
+                pwScreen.classList.remove('hidden-el');
+                anime({ targets: pwScreen, opacity: [0, 1], translateY: [20, 0], duration: 800, easing: 'easeOutQuad' });
+            }, 1000);
+        });
+
+        document.getElementById('pw-submit').addEventListener('click', checkPassword);
+        document.getElementById('pw-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function checkPassword() {
+            const val = document.getElementById('pw-input').value.toLowerCase().trim();
+            if (val === 'napay') {
+                celebrateSuccess();
+            } else {
+                anime({
+                    targets: '#pw-input',
+                    translateX: [0, -15, 15, -15, 15, 0],
+                    duration: 500,
+                    easing: 'easeInOutQuad'
+                });
+            }
+        }
+
+        function celebrateSuccess() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ADC178', '#FFB703', '#F0EAD6']
+            });
+            
+            phase = 'cake';
+            pwScreen.style.opacity = '0';
+            setTimeout(() => {
+                pwScreen.classList.add('hidden-el');
+                canvasContainer.style.display = 'block';
+                init3D();
+                
+                setTimeout(() => {
+                    uiOverlay.classList.remove('hidden-el');
+                    anime({ targets: uiOverlay, opacity: 1, translateY: [20, 0], duration: 1000 });
+                }, 2000);
+            }, 800);
+        }
+
+        function init3D() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            canvasContainer.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+            
+            const spotLight = new THREE.SpotLight(0xffffff, 0.5);
+            spotLight.position.set(10, 20, 10);
+            scene.add(spotLight);
+
+            cakeGroup = new THREE.Group();
+
+            const plateGeom = new THREE.CylinderGeometry(4.5, 4.2, 0.2, 32);
+            const plateMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+            const plate = new THREE.Mesh(plateGeom, plateMat);
+            plate.position.y = -1.3;
+            cakeGroup.add(plate);
+
+            const cakeGeom = new THREE.CylinderGeometry(3.5, 3.5, 2.5, 40);
+            const cakeMat = new THREE.MeshStandardMaterial({ color: 0x626F47, roughness: 0.9 });
+            const cakeBase = new THREE.Mesh(cakeGeom, cakeMat);
+            cakeGroup.add(cakeBase);
+
+            const creamGeom = new THREE.CylinderGeometry(3.6, 3.6, 0.4, 40);
+            const creamMat = new THREE.MeshStandardMaterial({ color: 0xfdfbf0 });
+            const cream = new THREE.Mesh(creamGeom, creamMat);
+            cream.position.y = 1.25;
+            cakeGroup.add(cream);
+
+            for (let i = 0; i < 18; i++) {
+                const angle = (i / 18) * Math.PI * 2;
+                const r = 2.8;
+                const cGroup = new THREE.Group();
+                
+                const cGeom = new THREE.CylinderGeometry(0.1, 0.1, 1.2, 8);
+                const cMat = new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? 0xFFB703 : 0xffffff });
+                const candleBody = new THREE.Mesh(cGeom, cMat);
+                
+                const flameGeom = new THREE.SphereGeometry(0.15, 8, 8);
+                const flameMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+                const flame = new THREE.Mesh(flameGeom, flameMat);
+                flame.position.y = 0.7;
+                flame.name = "flame";
+                
+                cGroup.add(candleBody);
+                cGroup.add(flame);
+                cGroup.position.set(Math.cos(angle) * r, 1.8, Math.sin(angle) * r);
+                cGroup.userData = { id: i + 1, message: messages[i] };
+                
+                candles.push(cGroup);
+                cakeGroup.add(cGroup);
+            }
+
+            scene.add(cakeGroup);
+            camera.position.set(0, 8, 12);
+            camera.lookAt(0, 0, 0);
+
+            cakeGroup.scale.set(0, 0, 0);
+            anime({
+                targets: cakeGroup.scale,
+                x: 1, y: 1, z: 1,
+                duration: 2500,
+                easing: 'easeOutElastic(1, .6)'
+            });
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (cakeGroup) cakeGroup.rotation.y += 0.003;
+            candles.forEach((c, index) => {
+                const flame = c.children[1];
+                const s = 1 + Math.sin(Date.now() * 0.01 + index) * 0.2;
+                flame.scale.set(s, s*1.2, s);
+            });
+            renderer.render(scene, camera);
+        }
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        window.addEventListener('mousedown', (e) => {
+            if (phase !== 'cake') return;
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+            if (intersects.length > 0) {
+                let obj = intersects[0].object;
+                while (obj.parent && !obj.userData.id) obj = obj.parent;
+                if (obj.userData.id) showLetter(obj.userData.id, obj.userData.message);
+            }
+        });
+
+        function showLetter(id, msg) {
+            document.getElementById('letter-title').innerText = `Candle #${id}`;
+            document.getElementById('letter-content').innerText = msg;
+            secretOverlay.classList.remove('hidden-el');
+            anime({ targets: '.letter-modal', scale: [0.9, 1], opacity: [0, 1], duration: 400, easing: 'easeOutCubic' });
+        }
+
+        document.getElementById('close-letter').onclick = () => {
+            anime({ targets: '.letter-modal', scale: 0.9, opacity: 0, duration: 300, easing: 'easeInCubic', complete: () => secretOverlay.classList.add('hidden-el') });
+        };
+
+        document.getElementById('open-memories-btn').onclick = () => {
+            phase = 'gallery';
+            canvasContainer.style.display = 'none';
+            galleryScreen.classList.remove('hidden-el');
+            window.scrollTo(0, 0);
+        };
+
+        document.getElementById('back-to-cake').onclick = () => {
+            phase = 'cake';
+            galleryScreen.classList.add('hidden-el');
+            canvasContainer.style.display = 'block';
+        };
+
+        document.getElementById('sunflower-trigger').onclick = () => {
+            if (photoCount < totalPhotos) {
+                addMemory();
+            } else {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
+            }
+        };
+
+        function addMemory() {
+            const photoUrl = myPhotos[photoCount];
+            const captionText = myCaptions[photoCount];
+            
+            photoCount++;
+            document.getElementById('progress-text').innerText = `${photoCount} / ${totalPhotos} Unlocked`;
+            
+            const item = document.createElement('div');
+            item.className = 'item';
+            const rot = (Math.random() * 12 - 6).toFixed(2);
+            item.style.transform = `rotate(${rot}deg) scale(0.5)`;
+            item.style.opacity = '0';
+
+            const img = document.createElement('img');
+            // Adding no-referrer policy to help bypass hotlinking blocks
+            img.referrerPolicy = "no-referrer";
+            img.src = photoUrl;
+            img.onerror = () => { 
+                console.error("Failed to load image:", photoUrl);
+                img.src = "https://via.placeholder.com/400?text=Check+Photo+Link"; 
+            };
+            
+            const cap = document.createElement('div');
+            cap.className = 'caption';
+            cap.innerText = captionText;
+
+            item.appendChild(img);
+            item.appendChild(cap);
+            photoGrid.appendChild(item);
+
+            anime({
+                targets: item,
+                scale: 1,
+                opacity: 1,
+                rotate: rot,
+                duration: 600,
+                easing: 'easeOutElastic(1, .8)'
+            });
+
+            if (photoCount === totalPhotos) {
+                document.getElementById('sunflower-trigger').innerText = "💖";
+                document.querySelector('#sunflower-trigger-container p').innerText = "All memories unlocked. You are the best, Lorraine!";
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 } });
+            }
+
+            item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        window.addEventListener('resize', () => {
+            if (!renderer) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
 </html>
