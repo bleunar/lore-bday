@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBD Lorraine! 🌻</title>
+    <title>DepED - Application Form </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600&family=Great+Vibes&family=Homemade+Apple&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600&family=Great+Vibes&family=Homemade+Apple&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --sage: #ADC178;
+            --sage: #a0aa84;
             --matcha: #626F47;
             --cream: #F0EAD6;
             --sunflower: #FFB703;
@@ -26,9 +29,17 @@
             color: var(--dark-sage);
         }
 
-        .serif { font-family: 'DM+Serif+Display', serif; }
-        .signature { font-family: 'Great Vibes', cursive; }
-        .handwritten { font-family: 'Homemade Apple', cursive; }
+        .serif {
+            font-family: 'DM+Serif+Display', serif;
+        }
+
+        .signature {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .handwritten {
+            font-family: 'Homemade Apple', cursive;
+        }
 
         #canvas-container {
             position: fixed;
@@ -41,8 +52,10 @@
             background: radial-gradient(circle at center, #FDFBF0 0%, #DDE5B6 100%);
         }
 
-        .hidden-el { display: none !important; }
-        
+        .hidden-el {
+            display: none !important;
+        }
+
         .letter-modal {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
@@ -59,11 +72,11 @@
             max-width: 1200px;
             padding: 60px 20px;
         }
-        
+
         .item {
             background: white;
             padding: 12px 12px 40px 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -71,11 +84,13 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
         }
+
         .item:hover {
             transform: scale(1.08) rotate(0deg) !important;
             z-index: 50;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
         }
+
         .item img {
             width: 100%;
             aspect-ratio: 1;
@@ -83,6 +98,7 @@
             background: #f7f7f7;
             border: 1px solid #eee;
         }
+
         .item .caption {
             margin-top: 15px;
             font-family: 'Homemade Apple', cursive;
@@ -102,8 +118,9 @@
             font-size: 6rem;
             cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1));
         }
+
         #sunflower-trigger:hover {
             transform: scale(1.15) rotate(15deg);
         }
@@ -124,44 +141,59 @@
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             border-radius: 99px;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             pointer-events: auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--cream); }
-        ::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 10px; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--sage);
+            border-radius: 10px;
+        }
     </style>
 </head>
-<body>
 
+<body>
     <!-- Phase 1: Intro -->
     <div id="intro" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-[#F0EAD6] transition-opacity duration-1000 cursor-pointer">
         <div class="sunflower-float" style="top:15%; left:10%">🌻</div>
         <div class="sunflower-float" style="bottom:20%; right:15%">🌻</div>
         <div class="sunflower-float" style="top:20%; right:10%">🌻</div>
-        
-        <h1 class="serif text-5xl md:text-8xl text-[#626F47] mb-4 text-center px-4 tracking-tight">hello, lorraine!</h1>
+
+        <h1 class="serif text-5xl md:text-8xl text-[#626F47] mb-4 text-center px-4 tracking-tight">Hello, Lorraine!</h1>
         <p class="handwritten text-xl text-[#A3B18A] animate-bounce">Click anywhere to begin</p>
     </div>
 
     <!-- Phase 2: Password -->
-    <div id="password-screen" class="fixed inset-0 flex flex-col items-center justify-center z-40 hidden-el bg-[#F0EAD6] px-6">
-        <div class="max-w-md w-full bg-white/40 p-10 rounded-3xl backdrop-blur-sm border-2 border-white/50 text-center shadow-xl">
-            <h2 class="text-3xl serif text-[#626F47] mb-6">A Little Security...</h2>
+    <div id="password-screen"
+        class="fixed inset-0 flex flex-col items-center justify-center z-40 hidden-el bg-[#F0EAD6] px-6">
+        <div
+            class="max-w-md w-full bg-white/40 p-10 rounded-3xl backdrop-blur-sm border-2 border-white/50 text-center shadow-xl">
+            <div>
+
+            </div>
+
             <p class="text-gray-600 mb-8">Enter the secret word to unlock your birthday surprise.</p>
-            
+
             <div class="relative mb-6">
-                <input type="password" id="pw-input" 
-                    class="w-full bg-white border-2 border-[#ADC178] rounded-2xl px-6 py-4 outline-none text-center text-xl tracking-widest focus:ring-4 focus:ring-[#ADC178]/30 transition-all" 
+                <input type="password" id="pw-input"
+                    class="w-full bg-white border-2 border-[#ADC178] rounded-2xl px-6 py-4 outline-none text-center text-xl tracking-widest focus:ring-4 focus:ring-[#ADC178]/30 transition-all"
                     placeholder="••••••••">
             </div>
-            
+
             <p class="italic text-sm text-[#A3B18A] mb-8 handwritten">clue: after class iyay</p>
-            
-            <button id="pw-submit" class="w-full bg-[#626F47] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#4A5533] transform active:scale-95 transition-all shadow-lg">
+
+            <button id="pw-submit"
+                class="w-full bg-[#626F47] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#4A5533] transform active:scale-95 transition-all shadow-lg">
                 Unlock Memories
             </button>
         </div>
@@ -172,7 +204,8 @@
         <div id="ui-overlay" class="hidden-el opacity-0 transition-opacity duration-1000">
             <div class="glass-card flex flex-col items-center gap-2">
                 <p class="serif text-[#626F47]">Click the candles to read messages</p>
-                <button id="open-memories-btn" class="bg-[#626F47] text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-[#4A5533] transition-colors">
+                <button id="open-memories-btn"
+                    class="bg-[#626F47] text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-[#4A5533] transition-colors">
                     View Photo Scrapbook →
                 </button>
             </div>
@@ -180,20 +213,22 @@
     </div>
 
     <!-- Secret Letter Overlay -->
-    <div id="secret-overlay" class="fixed inset-0 z-[100] hidden-el flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm">
+    <div id="secret-overlay"
+        class="fixed inset-0 z-[100] hidden-el flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm">
         <div class="letter-modal p-8 md:p-12 rounded-3xl max-w-lg w-full relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-[#FFB703]"></div>
-            <button id="close-letter" class="absolute top-4 right-6 text-3xl text-gray-400 hover:text-black transition-colors">&times;</button>
-            
+            <button id="close-letter"
+                class="absolute top-4 right-6 text-3xl text-gray-400 hover:text-black transition-colors">&times;</button>
+
             <div class="flex items-center gap-4 mb-6">
                 <div class="w-12 h-12 rounded-full bg-[#F0EAD6] flex items-center justify-center text-2xl">🕯️</div>
                 <h3 id="letter-title" class="serif text-3xl text-[#626F47]">Candle #1</h3>
             </div>
-            
+
             <div class="max-h-[60vh] overflow-y-auto pr-4">
                 <p id="letter-content" class="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap"></p>
             </div>
-            
+
             <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end">
                 <p class="signature text-2xl text-[#626F47]">With love always</p>
             </div>
@@ -201,24 +236,29 @@
     </div>
 
     <!-- Phase 4: Photo Gallery Layout -->
-    <div id="gallery-screen" class="fixed inset-0 z-[60] hidden-el bg-[#F0EAD6] overflow-y-auto flex flex-col items-center">
-        <nav class="sticky top-0 w-full bg-[#F0EAD6]/80 backdrop-blur-md z-[70] py-6 px-10 flex justify-between items-center border-b border-[#ADC178]/20">
-            <button id="back-to-cake" class="text-[#626F47] flex items-center gap-2 font-bold hover:translate-x-[-5px] transition-transform">
+    <div id="gallery-screen"
+        class="fixed inset-0 z-[60] hidden-el bg-[#F0EAD6] overflow-y-auto flex flex-col items-center">
+        <nav
+            class="sticky top-0 w-full bg-[#F0EAD6]/80 backdrop-blur-md z-[70] py-6 px-10 flex justify-between items-center border-b border-[#ADC178]/20">
+            <button id="back-to-cake"
+                class="text-[#626F47] flex items-center gap-2 font-bold hover:translate-x-[-5px] transition-transform">
                 ← Back to Cake
             </button>
             <h2 class="serif text-2xl md:text-3xl text-[#626F47]">memories💚</h2>
             <div class="w-20"></div>
         </nav>
-        
+
         <!-- Sunflower Trigger -->
         <div id="sunflower-trigger-container" class="flex flex-col items-center mt-12 mb-4">
             <div id="sunflower-trigger" class="hover:rotate-12 transition-transform">🌻</div>
-            <p class="text-[#626F47] mt-6 serif text-xl italic px-4 text-center">Tap the sunflower to reveal your photos...</p>
-            <p id="progress-text" class="text-[#A3B18A] text-sm mt-2 uppercase tracking-widest font-bold">0 / 7 Unlocked</p>
+            <p class="text-[#626F47] mt-6 serif text-xl italic px-4 text-center">Tap the sunflower to reveal your
+                photos...</p>
+            <p id="progress-text" class="text-[#A3B18A] text-sm mt-2 uppercase tracking-widest font-bold">0 / 7 Unlocked
+            </p>
         </div>
-        
+
         <div class="layout-container" id="photo-grid"></div>
-        
+
         <div class="h-40"></div>
     </div>
 
@@ -270,7 +310,7 @@
         let phase = 'intro';
         let scene, camera, renderer, cakeGroup, candles = [];
         let photoCount = 0;
-        const totalPhotos = 7; 
+        const totalPhotos = 7;
 
         // --- Elements ---
         const intro = document.getElementById('intro');
@@ -319,14 +359,14 @@
                 origin: { y: 0.6 },
                 colors: ['#ADC178', '#FFB703', '#F0EAD6']
             });
-            
+
             phase = 'cake';
             pwScreen.style.opacity = '0';
             setTimeout(() => {
                 pwScreen.classList.add('hidden-el');
                 canvasContainer.style.display = 'block';
                 init3D();
-                
+
                 setTimeout(() => {
                     uiOverlay.classList.remove('hidden-el');
                     anime({ targets: uiOverlay, opacity: 1, translateY: [20, 0], duration: 1000 });
@@ -344,7 +384,7 @@
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
-            
+
             const spotLight = new THREE.SpotLight(0xffffff, 0.5);
             spotLight.position.set(10, 20, 10);
             scene.add(spotLight);
@@ -372,22 +412,22 @@
                 const angle = (i / 18) * Math.PI * 2;
                 const r = 2.8;
                 const cGroup = new THREE.Group();
-                
+
                 const cGeom = new THREE.CylinderGeometry(0.1, 0.1, 1.2, 8);
                 const cMat = new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? 0xFFB703 : 0xffffff });
                 const candleBody = new THREE.Mesh(cGeom, cMat);
-                
+
                 const flameGeom = new THREE.SphereGeometry(0.15, 8, 8);
                 const flameMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
                 const flame = new THREE.Mesh(flameGeom, flameMat);
                 flame.position.y = 0.7;
                 flame.name = "flame";
-                
+
                 cGroup.add(candleBody);
                 cGroup.add(flame);
                 cGroup.position.set(Math.cos(angle) * r, 1.8, Math.sin(angle) * r);
                 cGroup.userData = { id: i + 1, message: messages[i] };
-                
+
                 candles.push(cGroup);
                 cakeGroup.add(cGroup);
             }
@@ -413,7 +453,7 @@
             candles.forEach((c, index) => {
                 const flame = c.children[1];
                 const s = 1 + Math.sin(Date.now() * 0.01 + index) * 0.2;
-                flame.scale.set(s, s*1.2, s);
+                flame.scale.set(s, s * 1.2, s);
             });
             renderer.render(scene, camera);
         }
@@ -469,10 +509,10 @@
         function addMemory() {
             const photoUrl = myPhotos[photoCount];
             const captionText = myCaptions[photoCount];
-            
+
             photoCount++;
             document.getElementById('progress-text').innerText = `${photoCount} / ${totalPhotos} Unlocked`;
-            
+
             const item = document.createElement('div');
             item.className = 'item';
             const rot = (Math.random() * 12 - 6).toFixed(2);
@@ -483,17 +523,17 @@
             // Adding no-referrer policy to help bypass hotlinking blocks
             img.referrerPolicy = "no-referrer";
             img.src = photoUrl;
-            img.onerror = () => { 
+            img.onerror = () => {
                 console.error("Failed to load image:", photoUrl);
-                img.src = "https://via.placeholder.com/400?text=Check+Photo+Link"; 
+                img.src = "https://via.placeholder.com/400?text=Check+Photo+Link";
             };
-            
+
             const cap = document.createElement('div');
             cap.className = 'caption';
             cap.innerText = captionText;
 
             item.appendChild(img);
-            item.appendChild(cap);
+            <!-- item.appendChild(cap); -->
             photoGrid.appendChild(item);
 
             anime({
@@ -522,4 +562,5 @@
         });
     </script>
 </body>
+
 </html>
