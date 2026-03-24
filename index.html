@@ -169,7 +169,7 @@
         <div class="sunflower-float" style="bottom:20%; right:15%">🌻</div>
         <div class="sunflower-float" style="top:20%; right:10%">🌻</div>
 
-        <h1 class="serif text-5xl md:text-8xl text-[#626F47] mb-4 text-center px-4 tracking-tight">Hello, Lorraine!</h1>
+        <h1 class="serif text-5xl md:text-8xl text-[#626F47] mb-4 text-center px-4 tracking-tight">💚💚💚</h1>
         <p class="handwritten text-xl text-[#A3B18A] animate-bounce">Click anywhere to begin</p>
     </div>
 
@@ -187,10 +187,10 @@
             <div class="relative mb-6">
                 <input type="password" id="pw-input"
                     class="w-full bg-white border-2 border-[#ADC178] rounded-2xl px-6 py-4 outline-none text-center text-xl tracking-widest focus:ring-4 focus:ring-[#ADC178]/30 transition-all"
-                    placeholder="••••••••">
+                    placeholder="•••••">
             </div>
 
-            <p class="italic text-sm text-[#A3B18A] mb-8 handwritten">clue: after class iyay</p>
+            <p class="italic text-md text-[#A3B18A] mb-8 handwritten font-bold">clue : after class iyay</p>
 
             <button id="pw-submit"
                 class="w-full bg-[#626F47] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#4A5533] transform active:scale-95 transition-all shadow-lg">
@@ -236,28 +236,25 @@
     </div>
 
     <!-- Phase 4: Photo Gallery Layout -->
-    <div id="gallery-screen"
-        class="fixed inset-0 z-[60] hidden-el bg-[#F0EAD6] overflow-y-auto flex flex-col items-center">
+    <div id="gallery-screen" class="fixed inset-0 z-[60] hidden-el bg-[#F0EAD6] overflow-y- flex flex-col items-center">
         <nav
-            class="sticky top-0 w-full bg-[#F0EAD6]/80 backdrop-blur-md z-[70] py-6 px-10 flex justify-between items-center border-b border-[#ADC178]/20">
+            class="sticky top-0 w-full bg-[#F0EAD6]/80 backdrop-blur-md z-[70] py-2 gap-4 px-10 flex justify-center flex-wrap items-center border-b border-[#ADC178]/20">
             <button id="back-to-cake"
-                class="text-[#626F47] flex items-center gap-2 font-bold hover:translate-x-[-5px] transition-transform">
+                class="text-[#626F47] flex items-start md:items-center gap-2 font-bold hover:translate-x-[-5px] transition-transform text-nowrap">
                 ← Back to Cake
             </button>
-            <h2 class="serif text-2xl md:text-3xl text-[#626F47]">memories💚</h2>
-            <div class="w-20"></div>
+            <h2 class="serif text-2xl md:text-3xl text-[#626F47] text-center w-full">memories with me💚</h2>
+            
         </nav>
 
         <!-- Sunflower Trigger -->
-        <div id="sunflower-trigger-container" class="flex flex-col items-center mt-12 mb-4">
+        <div id="sunflower-trigger-container" class="flex flex-col items-center justify-end absolute pb-8 bottom-0 left-0 traslate-y-1/2 w-full z-50">
             <div id="sunflower-trigger" class="hover:rotate-12 transition-transform">🌻</div>
-            <p class="text-[#626F47] mt-6 serif text-xl italic px-4 text-center">Tap the sunflower to reveal your
-                photos...</p>
-            <p id="progress-text" class="text-[#A3B18A] text-sm mt-2 uppercase tracking-widest font-bold">0 / 7 Unlocked
-            </p>
+            <p class="text-[#626F47] mt-6 serif text-xl italic px-4 text-center">Tap the sunflower to reveal memories</p>
+            <p id="progress-text" class="text-[#A3B18A] text-sm mt-2 uppercase tracking-widest font-bold">0 / 7 Unlocked</p>
         </div>
 
-        <div class="layout-container" id="photo-grid"></div>
+        <div class="layout-container overflow-y-auto" id="photo-grid"></div>
 
         <div class="h-40"></div>
     </div>
